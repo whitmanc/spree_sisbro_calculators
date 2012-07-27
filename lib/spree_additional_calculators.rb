@@ -1,7 +1,6 @@
 require 'spree_core'
-require 'spree_additional_calculators_hooks'
 
-module SpreeAdditionalCalculators
+module Spree
   class Engine < Rails::Engine
 
     config.autoload_paths += %W(#{config.root}/lib)
@@ -10,19 +9,24 @@ module SpreeAdditionalCalculators
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
         Rails.env.production? ? require(c) : load(c)
       end
-
-      #register all calculators
-      [
-        AdditionalCalculator::WeightAndQuantity
-      ].each do |c_model|
-        begin
-          c_model.register if c_model.table_exists?
-        rescue Exception => e
-          $stderr.puts "Error registering calculator #{c_model}"
-        end
-      end
     end
 
     config.to_prepare &method(:activate).to_proc
+     
+     
+    initializer "spree_active_shipping.register.calculators" do |app|
+      Dir.glob(File.join(File.dirname(__FILE__), "../../app/models/spree/calculator/**/*.rb")) do |c|
+        Rails.env.production? ? require(c) : load(c)
+      end
+
+      app.config.spree.calculators.shipping_methods.concat(
+        [Spree::Calculator::FedexTwoDay,
+         Spree::Calculator::FedexGround,
+         Spree::Calculator::FedexStandardOvernight,
+         Spree::Calculator::UspsPriorityMail,
+         Spree::Calculator::UspsFirstClass,
+         Spree::Calculator::SuperSaver]
+      )
+    end 
   end
 end
