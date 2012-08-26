@@ -36,7 +36,7 @@ module Spree
       else
         # Option is available ($4.00) if the order is between 13 and 48 oz (3 lbs)
         if total_weight >= 13 and total_weight < 48
-          4.0
+          4.5
         else
           nil
         end 
