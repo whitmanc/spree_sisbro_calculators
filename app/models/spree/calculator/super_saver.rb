@@ -13,8 +13,8 @@ module Spree
       line_items = object_to_line_items(object)
       return nil if line_items.nil?
       
-      books_taxon = Spree::Taxon.find_by_name "Books"
-      dvds_taxon = Spree::Taxon.find_by_name "DVDs"
+      books_taxon = Spree::Taxon.find(3)
+      dvds_taxon = Spree::Taxon.find_by_name(5)
       
       # Flag to indicate if order has anything but books/dvds
       order_has_unacceptable_item = false
