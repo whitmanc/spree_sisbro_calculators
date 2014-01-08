@@ -14,7 +14,7 @@ module Spree
       return nil if line_items.nil?
       
       books_taxon = Spree::Taxon.find(3)
-      dvds_taxon = Spree::Taxon.find_by_name(5)
+      dvds_taxon = Spree::Taxon.find(5)
       
       # Flag to indicate if order has anything but books/dvds
       order_has_unacceptable_item = false
